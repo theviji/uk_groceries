@@ -1,0 +1,3 @@
+[run]
+source = uk_groceries
+omit = uk_groceries/test*
