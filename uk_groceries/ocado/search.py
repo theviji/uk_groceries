@@ -14,7 +14,20 @@ class OcadoSearcher(object):
         response = requests.get(url='https://www.ocado.com/webshop/getSearchProducts.do',
                                 params=params)
         tree = lxml.html.fromstring(response.content)
-        return json.loads(tree.cssselect('script.js-productPageJson')[0].text_content())
+        json_response = json.loads(tree.cssselect('script.js-productPageJson')[0].text_content())
+        items = []
+        for section in json_response['sections']:
+            for fop in section['fops']:
+                try:
+                    fop.update(fop['product'])
+                    fop.pop('product', None)
+                    fop['imageSrc'] = 'https://www.ocado.com' + fop['imageSrc']
+                    fop.update(section['sectionAttributes'])
+                    items.append(fop)
+                except:
+                    pass # no product in this item
+                
+        return {'items' : items}
 
     def get_number_of_products(self, query):
         """ Print the number of products """
