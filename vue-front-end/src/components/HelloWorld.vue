@@ -5,7 +5,9 @@
         <button v-on:click="sendData()">Send</button>
         <br />
         <br />
-        <textarea>{{ response }}</textarea>
+        <div class="item" v-for='(item, index) in response.items' :key='index'>
+            <img :src="item.imageSrc" />
+        </div>
     </div>
 </template>
 
@@ -33,6 +35,7 @@
         methods: {
             sendData() {
                 axios({ method: "GET", "url": "http://localhost:6543/ocado/"+ this.input.query, "headers": { "content-type": "application/json" } }).then(result => {
+                    console.log(result.data);
                     this.response = result.data;
                 }, error => {
                     console.error(error);
