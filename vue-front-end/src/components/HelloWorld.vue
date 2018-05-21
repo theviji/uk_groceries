@@ -1,12 +1,25 @@
 <template>
-    <div class="hello">
+    <div class="container">
         <h1>Your IP is {{ ip }}</h1>
         <input type="text" v-model="input.query" placeholder="Query" />
         <button v-on:click="sendData()">Send</button>
         <br />
         <br />
-        <div class="item" v-for='(item, index) in response.items' :key='index'>
-            <img :src="item.imageSrc" />
+        <div class="tile is-ancestor">
+            <div class="tile is-vertical is-8">
+                <div class="tile" v-for='(item, index) in response.items' :key='index'>
+                    <img :src="item.imageSrc" />
+                    <div class="tile is-parent">
+                        <article class="tile is-child notification is-info">
+                        <p class="title">Middle tile</p>
+                        <p class="subtitle">With an image</p>
+                        <figure class="image is-4by3">
+                            <img :src="item.imageSrc">
+                        </figure>
+                        </article>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
