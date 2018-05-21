@@ -9,10 +9,13 @@
       </v-toolbar>
       <v-layout row>
         <v-flex xs6 order-rg2>
+          <v-card tile flat>
+            <v-card-media src="/static/ocado.PNG" contain height="100px"></v-card-media>
+          </v-card>
           <v-layout row>
             <v-flex d-flex>
               <v-layout row wrap>
-                <v-flex v-for='(item, index) in response.items' :key='index' d-flex xs6>
+                <v-flex v-for='(item, index) in ocadoResponse.items' :key='index' d-flex xs6>
                   <v-layout card row>
                     <v-flex xs7>
                       <div>
@@ -36,9 +39,34 @@
           </v-layout>
         </v-flex>
         <v-flex xs6>
-          <v-card dark tile flat color="red darken-4">
-            <v-card-text>#2</v-card-text>
+          <v-card tile flat>
+            <v-card-media src="/static/sainsburys.PNG" contain height="100px"></v-card-media>
           </v-card>
+          <v-layout row>
+            <v-flex d-flex>
+              <v-layout row wrap>
+                <v-flex v-for='(item, index) in sainsburysResponse.items' :key='index' d-flex xs6>
+                  <v-layout card row>
+                    <v-flex xs7>
+                      <div>
+                        <div class="headline">{{ item.name }}</div>
+                        <div>GBP {{ item.price }}</div>
+                      </div>
+                    </v-flex>
+                    <v-flex xs5>
+                      <a :href="item.link">
+                        <v-card-media
+                          :src="item.image"
+                          height="125px"
+                          contain
+                        ></v-card-media>
+                      </a>
+                    </v-flex>
+                  </v-layout>
+                </v-flex>
+              </v-layout>
+            </v-flex>
+          </v-layout>
         </v-flex>
       </v-layout>
     </v-container>
@@ -55,17 +83,22 @@ export default {
   data () {
       return {
           searchText: "",
-          response: ""
+          ocadoResponse: "",
+          sainsburysResponse: "",
       }
   },
   methods: {
       sendData() {
-          axios({ method: "GET", "url": "http://localhost:6543/ocado/"+ this.searchText, "headers": { "content-type": "application/json" } }).then(result => {
-              console.log(result.data);
-              this.response = result.data;
-          }, error => {
-              console.error(error);
-          });
+        axios.all([
+          axios.get("http://localhost:6543/ocado/"+ this.searchText),
+          axios.get("http://localhost:6543/sainsburys/"+ this.searchText)
+        ])
+        .then(axios.spread((ocadoRes, sainsburysRes) => {
+          this.ocadoResponse = ocadoRes.data,
+          this.sainsburysResponse = sainsburysRes.data,
+          console.log(this.ocadoResponse),
+          console.log(this.sainsburysResponse)
+        }));
       }
   }
 }
