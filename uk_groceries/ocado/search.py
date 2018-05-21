@@ -21,6 +21,7 @@ class OcadoSearcher(object):
                 try:
                     fop.update(fop['product'])
                     fop.pop('product', None)
+                    fop['simplifiedBopUrl'] = 'https://www.ocado.com' + fop['simplifiedBopUrl']
                     fop['imageSrc'] = 'https://www.ocado.com' + fop['imageSrc']
                     fop.update(section['sectionAttributes'])
                     items.append(fop)
