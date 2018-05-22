@@ -1,5 +1,6 @@
 import json
 import lxml.html
+import re
 import requests
 
 class OcadoSearcher(object):
@@ -19,12 +20,15 @@ class OcadoSearcher(object):
         for section in json_response['sections']:
             for fop in section['fops']:
                 try:
-                    fop.update(fop['product'])
-                    fop.pop('product', None)
-                    fop['simplifiedBopUrl'] = 'https://www.ocado.com' + fop['simplifiedBopUrl']
-                    fop['imageSrc'] = 'https://www.ocado.com' + fop['imageSrc']
-                    fop.update(section['sectionAttributes'])
-                    items.append(fop)
+                    item = {
+                        'name': fop['product']['name'],
+                        'link': 'https://www.ocado.com' + fop['product']['simplifiedBopUrl'],
+                        'image': 'https://www.ocado.com' + fop['product']['imageSrc'],
+                        'quantity': re.sub(r"(\d.*) per pack", r"x\1", fop['product']['catchWeight']),
+                        'brand': fop['product']['brand'],
+                        'price': fop['product']['price']['currentPrice'].replace('&pound;', ''),
+                    }
+                    items.append(item)
                 except:
                     pass # no product in this item
                 
