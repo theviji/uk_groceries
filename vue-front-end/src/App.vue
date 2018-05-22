@@ -20,13 +20,13 @@
                     <v-flex xs7>
                       <div>
                         <div class="headline">{{ item.name }}</div>
-                        <div>GBP {{ item.price.currentPrice.replace('&poun', '').replace('d;', '') }}</div>
+                        <div>GBP {{ item.price }}</div>
                       </div>
                     </v-flex>
                     <v-flex xs5>
-                      <a :href="item.simplifiedBopUrl">
+                      <a :href="item.link">
                         <v-card-media
-                          :src="item.imageSrc"
+                          :src="item.image"
                           height="125px"
                           contain
                         ></v-card-media>
@@ -75,6 +75,7 @@
 
 <script>
 import axios from "axios";
+axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? process.env.PROD_API : process.env.DEV_API;
 
 export default {
   name: 'App',
@@ -89,9 +90,9 @@ export default {
   },
   methods: {
       sendData() {
-        axios.all([
-          axios.get("http://localhost:6543/ocado/"+ this.searchText),
-          axios.get("http://localhost:6543/sainsburys/"+ this.searchText)
+	axios.all([
+          axios.get("/ocado/"+ this.searchText),
+          axios.get("/sainsburys/"+ this.searchText)
         ])
         .then(axios.spread((ocadoRes, sainsburysRes) => {
           this.ocadoResponse = ocadoRes.data,
