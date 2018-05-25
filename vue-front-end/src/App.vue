@@ -2,10 +2,13 @@
   <v-app light>
     <v-container fluid>
       <v-toolbar dense>
-        <v-text-field prepend-icon="search"
+        <v-text-field ref="inputField" 
+                      @keyup.enter="submit" 
+                      prepend-icon="search"
                       v-model="searchText"
-                      hide-details single-line></v-text-field>
-        <v-btn @click="sendData" class="primary">submit</v-btn>                    
+                      hide-details single-line required></v-text-field>
+        <v-btn @click="submit" class="primary">submit</v-btn>
+        <v-btn @click="clear">clear</v-btn>
       </v-toolbar>
       <v-layout row>
         <v-flex xs6 order-rg2>
@@ -13,9 +16,9 @@
             <v-card-media src="/static/ocado.PNG" contain height="100px"></v-card-media>
           </v-card>
           <v-layout row>
-            <v-flex d-flex>
+            <v-flex>
               <v-layout row wrap>
-                <v-flex v-for='(item, index) in ocadoResponse.items' :key='index' d-flex xs6>
+                <v-flex v-for='(item, index) in ocadoResponse.items' :key='index' d-flex xs12>
                   <v-layout card row>
                     <v-flex xs7>
                       <div>
@@ -43,17 +46,17 @@
             <v-card-media src="/static/sainsburys.PNG" contain height="100px"></v-card-media>
           </v-card>
           <v-layout row>
-            <v-flex d-flex>
+            <v-flex>
               <v-layout row wrap>
-                <v-flex v-for='(item, index) in sainsburysResponse.items' :key='index' d-flex xs6>
+                <v-flex v-for='(item, index) in sainsburysResponse.items' :key='index' d-flex xs12 md6>
                   <v-layout card row>
-                    <v-flex xs7>
+                    <v-flex xs12>
                       <div>
                         <div class="headline">{{ item.name }}</div>
                         <div>GBP {{ item.price }}</div>
                       </div>
                     </v-flex>
-                    <v-flex xs5>
+                    <v-flex xs12>
                       <a :href="item.link">
                         <v-card-media
                           :src="item.image"
@@ -89,8 +92,8 @@ export default {
       }
   },
   methods: {
-      sendData() {
-	axios.all([
+      submit () {
+        axios.all([
           axios.get("/ocado/"+ this.searchText),
           axios.get("/sainsburys/"+ this.searchText)
         ])
@@ -100,7 +103,10 @@ export default {
           console.log(this.ocadoResponse),
           console.log(this.sainsburysResponse)
         }));
-      }
+    },
+    clear () {
+      this.$refs.inputField.reset()
+    }
   }
 }
 </script>
