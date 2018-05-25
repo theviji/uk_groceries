@@ -18,25 +18,11 @@
           <v-layout row>
             <v-flex>
               <v-layout row wrap>
-                <v-flex v-for='(item, index) in ocadoResponse.items' :key='index' d-flex xs12>
-                  <v-layout card row>
-                    <v-flex xs7>
-                      <div>
-                        <div class="headline">{{ item.name }}</div>
-                        <div>GBP {{ item.price }}</div>
-                      </div>
-                    </v-flex>
-                    <v-flex xs5>
-                      <a :href="item.link">
-                        <v-card-media
-                          :src="item.image"
-                          height="125px"
-                          contain
-                        ></v-card-media>
-                      </a>
-                    </v-flex>
-                  </v-layout>
-                </v-flex>
+                <Item
+                  v-for='item in ocadoResponse.items' 
+                  :key='item.index'
+                  :item='item'
+                  />
               </v-layout>
             </v-flex>
           </v-layout>
@@ -48,25 +34,11 @@
           <v-layout row>
             <v-flex>
               <v-layout row wrap>
-                <v-flex v-for='(item, index) in sainsburysResponse.items' :key='index' d-flex xs12 md6>
-                  <v-layout card row>
-                    <v-flex xs12>
-                      <div>
-                        <div class="headline">{{ item.name }}</div>
-                        <div>GBP {{ item.price }}</div>
-                      </div>
-                    </v-flex>
-                    <v-flex xs12>
-                      <a :href="item.link">
-                        <v-card-media
-                          :src="item.image"
-                          height="125px"
-                          contain
-                        ></v-card-media>
-                      </a>
-                    </v-flex>
-                  </v-layout>
-                </v-flex>
+                <Item
+                  v-for='item in sainsburysResponse.items' 
+                  :key='item.index'
+                  :item='item'
+                  />
               </v-layout>
             </v-flex>
           </v-layout>
@@ -77,12 +49,15 @@
 </template>
 
 <script>
+import Item from './components/Item'
+
 import axios from "axios";
 axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? process.env.PROD_API : process.env.DEV_API;
 
 export default {
   name: 'App',
   components: {
+    Item
   },
   data () {
       return {
