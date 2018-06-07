@@ -10,7 +10,7 @@
         </div>
       </v-flex>
       <v-flex xs4>
-        <a :href="item.link">
+        <a :href="item.link" target="_new">
           <v-card-media
             :src="item.image"
             height="125px"
