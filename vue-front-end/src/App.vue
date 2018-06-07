@@ -10,7 +10,7 @@
         <v-btn @click="submit" class="primary">submit</v-btn>
         <v-btn @click="clear">clear</v-btn>
       </v-toolbar>
-      <v-layout row>
+      <v-layout row class="mt-3">
         <v-flex xs6 order-rg2>
           <v-card tile flat>
             <v-card-media src="/static/ocado.PNG" contain height="100px"></v-card-media>
